@@ -3,16 +3,9 @@
 </div>
 
 <div id="badges" align="center">
-  <div>
-    <a href="https://twitter.com/goudunz1">
-      <img src="https://img.shields.io/badge/Twitter-blue?style=for-the-badge&logo=twitter&logoColor=white" alt="Twitter Badge"/>
-    </a>
-  </div>
-  <div>
-    <a href="#">
-      <img src="https://img.shields.io/badge/QQ%201518971987-red?style=for-the-badge&logo=wechat&logoColor=white" alt="Contact Badge"/>
-    </a>
-  </div>
+  <a href="https://twitter.com/goudunz1">
+    <img src="https://img.shields.io/badge/Twitter-blue?style=for-the-badge&logo=twitter&logoColor=white" alt="Twitter Badge"/>
+  </a>
 </div>
 
 <div id="counter" align="center">
@@ -20,16 +13,14 @@
 </div>
 
 <h1 align="center">
-Seems like you've found my github page! :scream_cat:
+Seems like you've found my github page! :clap:
 </h1>
 
-### :ghost: About Me
+### :mag: About Me
 
-- :telescope: NJU BSc CS, HKUST MSc IT, lifelong CTF player
+- :open_book: NJU BSc CS, HKUST MSc IT, lifelong CTF player
 
-- :seedling: Exploring Binary, Crypto, Web, ... everything I like.
-
-- :zap: Researching on Reverse Engineering tools and Software Security.
+- :eyes: Exploring :1st_place_medal:Binary, :2nd_place_medal:Crypto, :3rd_place_medal:Web, ... everything I like
 
 - :mailbox: How to reach me: ![Contact Badge](https://img.shields.io/badge/goudunz1@outlook.com-blue?style=flat&logo=gmail&logoColor=white)
 
