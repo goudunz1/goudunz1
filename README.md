@@ -1,22 +1,26 @@
 <div id="header" align="center">
   <img src="https://media.giphy.com/media/3BLAzwH4tYWygHwbjw/giphy.gif" width="150"/>
 </div>
+
 <div id="badges" align="center">
-  <a href="https://twitter.com/goudunz1" style="text-decoration: none">
-    <img src="https://img.shields.io/badge/Twitter-blue?style=for-the-badge&logo=twitter&logoColor=white" alt="Twitter Badge"/>
-  </a>
-  <a href="#" style="text-decoration: none">
-    <img src="https://img.shields.io/badge/YouTube-red?style=for-the-badge&logo=youtube&logoColor=white" alt="Youtube Badge"/>
-  </a>
-  <a href="#" style="text-decoration: none">
-    <img src="https://img.shields.io/badge/QQ%201518971987-green?style=for-the-badge&logo=wechat&logoColor=white" alt="Contact Badge"/>
-  </a>
+  <div>
+    <a href="https://twitter.com/goudunz1">
+      <img src="https://img.shields.io/badge/Twitter-blue?style=for-the-badge&logo=twitter&logoColor=white" alt="Twitter Badge"/>
+    </a>
+  </div>
+  <div>
+    <a href="#">
+      <img src="https://img.shields.io/badge/QQ%201518971987-red?style=for-the-badge&logo=wechat&logoColor=white" alt="Contact Badge"/>
+    </a>
+  </div>
 </div>
+
 <div id="counter" align="center">
   <img src="https://komarev.com/ghpvc/?username=goudunz1&style=flat-square&color=blue" alt=""/>
 </div>
+
 <h1 align="center">
-  Seems like you've found my github page! :scream_cat:
+Seems like you've found my github page! :scream_cat:
 </h1>
 
 ### :ghost: About Me
@@ -51,4 +55,4 @@
 
 ### :fire: My Stats :
 
-![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=goudunz1&layout=compact&theme=transparent)
+![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=goudunz1&layout=compact&theme=dark)
