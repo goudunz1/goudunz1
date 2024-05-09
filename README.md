@@ -27,7 +27,7 @@ Seems like you've found my github page! :scream_cat:
 
 - :telescope: NJU BSc CS, HKUST MSc IT, lifelong CTF player
 
-- :seedling: Exploring RE, Pwn, Web, ... anything I like.
+- :seedling: Exploring Binary, Crypto, Web, ... everything I like.
 
 - :zap: Researching on Reverse Engineering tools and Software Security.
 
