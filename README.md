@@ -13,7 +13,7 @@
 </div>
 
 <h1 align="center">
-Seems like you've found my github page! :clap:
+Looks like you found my github page! :clap:
 </h1>
 
 ### :mag: About Me
