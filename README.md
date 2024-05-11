@@ -20,7 +20,7 @@ Seems like you've found my github page! :clap:
 
 - :open_book: NJU BSc CS, HKUST MSc IT, lifelong CTF player
 
-- :eyes: Exploring :1st_place_medal:Binary, :2nd_place_medal:Crypto, :3rd_place_medal:Web, ... everything I like
+- :eyes: Exploring : Reverse Engineering, Cryptology, Web Security, ... everything I like
 
 - :mailbox: How to reach me: ![Contact Badge](https://img.shields.io/badge/goudunz1@outlook.com-blue?style=flat&logo=gmail&logoColor=white)
 
