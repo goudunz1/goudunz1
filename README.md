@@ -20,7 +20,11 @@ Looks like you found my github page! :clap:
 
 - :open_book: NJU BSc CS, HKUST MSc IT, lifelong CTF player
 
-- :eyes: Exploring : Reverse Engineering, Cryptology, Web Security, ... everything I like
+- :eyes: Exploring Reverse Engineering, Cryptology, Web Security, ... everything I like
 
 - :mailbox: How to reach me: ![Contact Badge](https://img.shields.io/badge/goudunz1@outlook.com-blue?style=flat&logo=gmail&logoColor=white)
+
+- :pen: My vimrc: [goudunz1's vimrc](https://github.com/goudunz1/vimrc)
+
+- :pencil2: My bash scripts: [goudunz1's bash scripts](http://github.com/goudunz1/bash_scripts)
 
