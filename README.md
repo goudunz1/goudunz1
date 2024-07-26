@@ -1,30 +1,5 @@
-<div id="header" align="center">
-  <img src="https://media.giphy.com/media/3BLAzwH4tYWygHwbjw/giphy.gif" width="150"/>
-</div>
+### :mailbox: goudunz1@outlook.com
 
-<div id="badges" align="center">
-  <a href="https://twitter.com/goudunz1">
-    <img src="https://img.shields.io/badge/Twitter-blue?style=for-the-badge&logo=twitter&logoColor=white" alt="Twitter Badge"/>
-  </a>
-</div>
+### :pen: [Yu Sheng's vimrc](https://github.com/goudunz1/vimrc)
 
-<div id="counter" align="center">
-  <img src="https://komarev.com/ghpvc/?username=goudunz1&style=flat-square&color=blue" alt=""/>
-</div>
-
-<h1 align="center">
-Looks like you found my github page! :clap:
-</h1>
-
-### :mag: About Me
-
-- :open_book: NJU BSc CS, HKUST MSc IT, lifelong CTF player
-
-- :eyes: Exploring Reverse Engineering, Cryptology, Web Security, ... everything I like
-
-- :mailbox: How to reach me: ![Contact Badge](https://img.shields.io/badge/goudunz1@outlook.com-blue?style=flat&logo=gmail&logoColor=white)
-
-- :pen: My vimrc: [goudunz1's vimrc](https://github.com/goudunz1/vimrc)
-
-- :pencil2: My bash scripts: [goudunz1's bash scripts](http://github.com/goudunz1/bash_scripts)
-
+### :pencil2: [Yu Sheng's bash scripts](http://github.com/goudunz1/bash_scripts)
