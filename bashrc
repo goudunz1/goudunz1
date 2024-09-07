@@ -3,6 +3,7 @@
 # Email: goudunz1@outlook.com
 # Description: basic bash functions and aliases
 
+# misc
 alias q='exit'
 alias c='clear'
 alias cs='clear;ls'
@@ -29,6 +30,8 @@ alias shut='sudo shutdown -h now'
 alias m='make'
 alias g='git'
 alias d='docker'
+
+# apt
 alias apth='cat /var/log/dpkg.log | grep'
 alias apti='sudo apt install'
 alias aptrm='sudo apt purge'
@@ -37,6 +40,15 @@ alias aptu='sudo apt update'
 alias aptg='sudo apt upgrade'
 alias aptl='sudo apt list --installed'
 
+# systemctl
+alias srv='sudo systemctl'
+alias srvup='sudo systemctl start'
+alias srvdown='sudo systemctl stop'
+alias srvre='sudo systemctl restart'
+alias srven='sudo systemctl enable'
+alias srvdis='sudo systemctl disable'
+
+# lazy extract
 extract() {
     if [ -f $1 ]; then
         case $1 in
@@ -58,6 +70,7 @@ extract() {
     fi
 }
 
+# set proxy to port $1
 allproxy() {
     if [ $# -eq 1 ]; then
         echo "allproxy: proxy set to port $1"
@@ -71,4 +84,3 @@ allproxy() {
         export ALL_PROXY=""
     fi
 }
-
