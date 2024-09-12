@@ -1,0 +1,548 @@
+" ==============================================================================
+" File: vimrc
+" Author: goudunz1
+" Email: goudunz1@outlook.com
+" Inspired by chenxuan's vimrc
+" https://github.com/chenxuan520/vim-fast
+" ==============================================================================
+
+let g:author = "goudunz1"
+let g:email = "goudunz1@outlook.com"
+let &l:foldmethod = "marker"
+iabbrev <expr> @@n g:author
+iabbrev <expr> @@e g:email
+
+" ==============================================================================
+" [vim options] {{{
+
+let mapleader = ","             " use ',' as leader key
+set nocompatible                " disable legacy mode(vi)
+filetype plugin indent on       " enable plugin and indent based on file types
+syntax on                       " enable built-in highlight
+set t_Co=256                    " require terminal to use 256 colors
+set noerrorbells                " turn off error bells
+set visualbell t_vb=            " turn off visual beeping
+set cmdheight=1                 " height of the cmd line
+set showcmd                     " show input in the cmd line
+set textwidth=0                 " disable auto <cr>
+set ruler                       " show cursor position in status line
+set laststatus=2                " show status line
+set number                      " show line numbers
+set relativenumber              " show relative line numbers
+set whichwrap+=<,>,h,l          " cursor key can cross rows
+set matchpairs+=<:>             " % can now detect <>
+set backspace=indent,eol,start  " delete special characters freely
+set virtualedit=block           " virtual select inside a tab
+set showtabline=2               " show tab menu
+set splitbelow                  " split new window below
+set splitright                  " split new vertical window right
+set mouse=                      " enable mouse
+set clipboard=unnamed           " host clipboard (require gvim)
+set wildmenu                    " better command auto completion
+set colorcolumn=80              " 80 characters warning line
+
+set autoindent                  " auto indent according to the previous line
+set cindent                     " turn on indent for c-like languages
+set cinoptions=g0,:0,N-s,E-s,(0 " see :help cinoptions
+set smartindent                 " smartly choose indent way
+set expandtab                   " soft tabs instead of tabs
+set shiftwidth=4                " use 4 spaces for auto shift
+set tabstop=4                   " set width of tab to 4
+set softtabstop=4               " use 4 spaces for a soft tab
+set smarttab                    " smartly shift with tabs and spaces
+
+set nowrap                      " disable line wrap if cursor too right
+set sidescroll=1                " set number of columns to move if cursor too right
+set sidescrolloff=4             " keep 4 visible column on the right
+set scrolloff=4                 " keep 4 visible line at the bottom
+
+set hlsearch                    " highlight the pattern
+set incsearch                   " highlight the pattern when typing
+set ignorecase                  " ignore search case
+set smartcase                   " smartly ignore search case
+set wrapscan                    " searches wrap over EOF
+
+set nobackup                    " disable backup file
+set noswapfile                  " disable swap file
+set autoread                    " auto load buffer if file changed
+set confirm                     " raise a dialog when saving
+
+" configurations for package matchit
+packadd! matchit
+
+" configurations for package termdebug
+nnoremap <f5> :packadd! termdebug<cr>:Termdebug<space>
+nnoremap <f6> :Break<cr>
+nnoremap <f7> :Over<cr>
+nnoremap <f8> :Step<cr>
+" vertical split termdebug windows
+let g:termdebug_wide=1
+
+" }}}
+" ==============================================================================
+
+" ==============================================================================
+" [plugin list] (managed by vim-plug) {{{
+
+call plug#begin('~/.vim/plugged')
+
+" onedark theme
+Plug 'joshdick/onedark.vim'
+
+" symbol list based on ctag/coc
+Plug 'liuchengxu/vista.vim', {'on': 'Vista'}
+
+" a modern fuzzy finder
+Plug 'Yggdroot/LeaderF', { 'on': 'Leaderf', 'do': ':LeaderfInstallCExtension' }
+
+" navigation sidebar tree
+Plug 'preservim/nerdtree', { 'on': 'NERDTreeToggle' }
+
+" auto pair special characters
+Plug 'jiangmiao/auto-pairs'
+
+" auto code align with spaces
+Plug 'godlygeek/tabular'
+
+" modern auto completion plugin based on LSP servers
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+
+" better command line prompt
+Plug 'vim-airline/vim-airline'
+
+" more icons (require nerd fonts)
+Plug 'ryanoasis/vim-devicons'
+
+" visualize vim movement
+Plug 'easymotion/vim-easymotion'
+
+" insert snippets quickly in vim (works together with coc-snippets)
+Plug 'honza/vim-snippets'
+
+" repeat find/till with f/t instead of ,/;
+Plug 'rhysd/clever-f.vim'
+
+call plug#end()
+
+" }}}
+" ==============================================================================
+
+" ==============================================================================
+" [user scripts] {{{
+
+" [movement] {{{
+
+" adjust window boundary
+nnoremap <c-up> <c-w>+
+xnoremap <c-up> <c-w>+
+nnoremap <c-down> <c-w>-
+xnoremap <c-down> <c-w>-
+nnoremap <c-left> <c-w><
+xnoremap <c-left> <c-w><
+nnoremap <c-right> <c-w>>
+xnoremap <c-right> <c-w>>
+
+" change focused window
+nnoremap <up> <c-w>k
+xnoremap <up> <c-w>k
+nnoremap <down> <c-w>j
+xnoremap <down> <c-w>j
+nnoremap <left> <c-w>h
+xnoremap <left> <c-w>h
+nnoremap <right> <c-w>l
+xnoremap <right> <c-w>l
+
+" }}}
+
+" [buffer manipulation] {{{
+
+" reload/redraw buffer
+nnoremap <leader>r :e<cr>
+xnoremap <leader>r :e<cr>
+nnoremap <leader>R :redraw!<cr>
+xnoremap <leader>R :redraw!<cr>
+
+func! s:changebuf(towards) abort
+    if &bt!=''||&ft=='netrw'
+        echoerr "functional buffer cannot be changed"|return
+    endif
+    if a:towards=='n'|bnext|else|bprevious|endif
+	while &bt!=''||&ft=='netrw'
+        if a:towards=='n'|bnext|else|bprevious|endif
+    endwhile
+endfunc
+
+" select previous buffer
+nnoremap <c-p> :call<space><sid>changebuf('p')<cr>
+xnoremap <c-p> :call<space><sid>changebuf('p')<cr>
+nnoremap <leader>j :call<space><sid>changebuf('p')<cr>
+xnoremap <leader>j :call<space><sid>changebuf('p')<cr>
+
+" select next buffer
+nnoremap <c-n> :call<space><sid>changebuf('n')<cr>
+xnoremap <c-n> :call<space><sid>changebuf('n')<cr>
+nnoremap <leader>j :call<space><sid>changebuf('n')<cr>
+xnoremap <leader>j :call<space><sid>changebuf('n')<cr>
+
+func! s:closebuf()
+    if bufname()==''||len(getbufinfo({'buflisted':1}))==0|quit|return|endif
+    if &bt==''|bdelete
+    elseif &bt=='quickfix'|cclose
+    elseif &bt=='loclist'|lclose
+    else|close
+    endif
+endfunc
+
+" leave current buffer
+nnoremap <leader>q :call<space><sid>closebuf()<cr>
+xnoremap <leader>q :call<space><sid>closebuf()<cr>
+
+" load file in new buffer
+nnoremap <leader>e :edit<space><c-r>=getcwd()<cr>/
+xnoremap <leader>e :edit<space><c-r>=getcwd()<cr>/
+nnoremap <leader>E :edit<space>/
+xnoremap <leader>E :edit<space>/
+"}}}
+
+" [tabs and async tasks] {{{
+
+" open a new empty tab
+nnoremap <leader><tab> :tabnew<cr>
+xnoremap <leader><tab> :tabnew<cr>
+nnoremap <leader><bs> :tabclose<cr>
+xnoremap <leader><bs> :tabclose<cr>
+
+" open a new empty window
+nnoremap <leader>v :vert new<cr>
+xnoremap <leader>v :vert new<cr>
+nnoremap <leader>V :new<cr>
+xnoremap <leader>V :new<cr>
+
+" open up a terminal
+nnoremap <leader>t :vert term<cr>
+xnoremap <leader>t :vert term<cr>
+nnoremap <leader>T :bo term ++rows=6<cr>
+xnoremap <leader>T :bo term ++rows=6<cr>
+
+" open up a terminal in a new tab
+nnoremap <leader><leader>t :tabe<cr>:vert term ++curwin ++close<cr>
+xnoremap <leader><leader>t :tabe<cr>:vert term ++curwin ++close<cr>
+
+" open up a terminal in a new tab under directory of current file (changes the
+" register @s)
+nnoremap <leader><leader>T :let @s=expand('%:p:h')<cr>:tabe<cr>:call term_start("bash",{"cwd":"<c-r>=@s<cr>","curwin":1,"term_finish":"close"})<cr>
+xnoremap <leader><leader>T :let @s=expand('%:p:h')<cr>:tabe<cr>:call term_start("bash",{"cwd":"<c-r>=@s<cr>","curwin":1,"term_finish":"close"})<cr>
+
+" run async tasks with 'vert term'
+command! -complete=shellcmd -nargs=+ AsyncRun exec "vert term ".<q-args>
+
+" }}}
+
+" [visual mode and selection] {{{
+
+" run marco in visual mode
+xnoremap @ :normal! @
+
+" select until next brace
+nnoremap <leader>{ /{<cr>:noh<cr>va}
+inoremap <leader>{ <c-[>/{<cr>:noh<cr>va}
+xnoremap <leader>{ <c-[>/{<cr>:noh<cr>va}
+nnoremap <leader>} ?}<cr>:noh<cr>va{
+inoremap <leader>} <c-[>?}<cr>:noh<cr>va{
+xnoremap <leader>} <c-[>?}<cr>:noh<cr>va{
+
+" selected move
+xnoremap <c-k> :move '<-2<cr>gv
+xnoremap <c-j> :move '>+1<cr>gv
+xnoremap <c-h> y<c-w>ho<c-[>vpgv
+xnoremap <c-l> y<c-w>lo<c-[>vpgv
+
+" substitute selected keyword (register @s will be used!)
+xnoremap <f2> "sy/\v\<<c-r>=@s<cr>\><cr><c-o>:%s/\v\<<c-r>=@s<cr>\>/
+
+" erase trailing spaces
+nnoremap d<space> :s/\s*$//<cr>:noh<cr><c-o>
+nnoremap d<bs> :%s/\s*$//<cr>:noh<cr><c-o>
+
+" erase empty lines
+nnoremap d<cr> :g/^\s*$/d<cr>:noh<cr>
+
+" clear search pattern highlight
+nnoremap <leader>h :noh<cr>
+xnoremap <leader>h :noh<cr>
+
+" re-enter the current line
+nnoremap dc d0d$
+nnoremap di d0d$i
+inoremap <c-d> <c-o>dd<c-o>o
+
+" }}}
+
+" [yank and paste] {{{
+
+" yank from system clipboard
+nnoremap <leader>y "+y
+xnoremap <leader>y "+y
+
+" paste to system clipboard
+nnoremap <leader>p "+p
+xnoremap <leader>p "+p
+nnoremap <leader>P "+P
+xnoremap <leader>P "+P
+
+" }}}
+
+" [indent and padding] {{{
+
+" shortcut for tab shift
+nnoremap <tab> >>
+xnoremap <tab> >
+nnoremap <s-tab> <<
+xnoremap <s-tab> <
+
+" hold <space> to add more space
+func! s:addspace()
+    exec "normal! i "
+    redraw
+    let ch = nr2char(getchar())
+    while ch == ' '
+        exec "normal! i "
+        redraw
+        let ch = nr2char(getchar())
+    endwhile
+endfunc
+
+" press <leader>, then hold <space> to shift
+nnoremap <leader><space> :call<space><sid>addspace()<cr>
+
+" show hidden characters
+nnoremap <leader>l :let &l:list=!&l:list<cr>
+xnoremap <leader>l :let &l:list=!&l:list<cr>
+
+" }}}
+
+" [better command line] {{{
+
+" tcsh-style command line (bash compatible)
+cnoremap <c-a> <home>
+cnoremap <c-b> <left>
+cnoremap <c-f> <right>
+
+" special command line characters
+let g:cmdpairs={'(':')','[':']','{':'}','"':'"',"'":"'",'<':'>','`':'`',}
+
+func! s:cmdautopair(ch, type)
+    if a:type==#"pars"
+        if has_key(g:cmdpairs, a:ch)
+            return a:ch.g:cmdpairs[a:ch]."\<left>"
+        elseif a:ch==getcmdline()[getcmdpos()-1]
+            return "\<right>"
+        endif
+    elseif a:type==#"quotes"
+        if has_key(g:cmdpairs, a:ch)
+            return a:ch.a:ch."\<left>"
+        elseif a:ch==getcmdline()[getcmdpos()-1]
+            return "\<right>"
+        endif
+    elseif a:type==#"bs"&&a:ch==#"\<bs>"
+        let pair=getcmdline()[getcmdpos()-1]
+        let pair_l=getcmdline()[getcmdpos()-2]
+        if has_key(g:cmdpairs, pair_l)&&(g:cmdpairs[pair_l]==pair)
+            return "\<right>\<bs>\<bs>"
+        endif
+    endif
+    return a:ch
+endfunc
+
+" auto complete command line key characters
+cnoremap <expr> ( <sid>cmdautopair('(', 'pars')
+cnoremap <expr> ) <sid>cmdautopair(')', 'pars')
+cnoremap <expr> [ <sid>cmdautopair('[', 'pars')
+cnoremap <expr> ] <sid>cmdautopair(']', 'pars')
+cnoremap <expr> { <sid>cmdautopair('{', 'pars')
+cnoremap <expr> } <sid>cmdautopair('}', 'pars')
+cnoremap <expr> < <sid>cmdautopair('<', 'pars')
+cnoremap <expr> > <sid>cmdautopair('>', 'pars')
+cnoremap <expr> " <sid>cmdautopair('"', "quotes")
+cnoremap <expr> ' <sid>cmdautopair("'", "quotes")
+cnoremap <expr> ` <sid>cmdautopair("`", "quotes")
+cnoremap <expr> <bs> <sid>cmdautopair("\<bs>", 'bs')
+
+" }}}
+
+augroup BufferEvents
+    " [buffer events] {{{
+    " define actions upon buffer entering and leaving
+    autocmd!
+
+    " remember the last position when re-opening a buffer
+    autocmd BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exec "normal! g'\"" | endif
+
+    " set cursor line if and only if window on focus
+    autocmd BufEnter,WinEnter * setlocal cursorline
+    autocmd BufLeave,WinLeave * setlocal nocursorline
+
+    " }}}
+augroup end
+
+" [vimdiff] {{{
+
+" shortcuts to open up a vimdiff window
+cab <expr>Diff "Diff ".expand('%:p:h')."/"
+command! -nargs=1 -bang -complete=file Diff exec ":vert diffsplit ".<q-args>
+
+" }}}
+
+" [quickfix] {{{
+
+" quickfix window
+nnoremap <space>n :cnext<cr>
+vnoremap <space>n :cnext<cr>
+nnoremap <space>p :cprevious<cr>
+vnoremap <space>p :cprevious<cr>
+nnoremap <expr> <space>q getwininfo()[winnr()-1]['quickfix']==1?":cclose\<cr>":":copen\<cr>"
+
+" }}}
+
+" }}}
+" ==============================================================================
+
+" ==============================================================================
+" [plugin settings] {{{
+
+" onedark.vim {{{
+
+colorscheme onedark
+" }}}
+
+" vista.vim {{{
+
+if exists(":Vista")
+    " enable vista icons
+    let g:vista#renderer#enable_icon = 1
+    
+    " default vista backend
+    let g:vista_default_executive = 'ctags'
+    
+    " shortcut to inspect symbols
+    nnoremap <leader>y :Vista!!<space>coc
+    
+    " close buffer if vista is the only buffer remaining
+    augroup Vista
+    	autocmd!
+    	autocmd BufEnter * if (&ft=='vista'||&ft=='vista_markdown')&&winnr('$')==1|bd|endif
+    augroup END
+endif
+
+" }}}
+
+" NERDTree {{{
+
+if exists(":NERDTreeToggle")
+    " NERDTree sidebar width
+    let g:NERDTreeWinSize=28
+    
+    " show all hidden files and folders
+    let g:NERDTreeShowHidden=1
+    
+    " shortcut to open sidebar
+    nnoremap <leader>n :NERDTreeToggle<cr>
+    
+    " delete buffer if NERDTree is the only buffer remaining
+    augroup NERDTree
+        autocmd!
+        autocmd BufEnter * if winnr('$')==1&&exists('b:NERDTree')&&b:NERDTree.isTabTree()|bd|endif
+    augroup END
+endif
+
+" }}}
+
+" auto-pairs {{{
+
+if exists("g:AutoPairs")
+    " disable some pre-defined maps
+    let g:AutoPairsMapCh=0
+    let g:AutoPairsMapBS=0
+    let g:AutoPairsMapCR=0
+    
+    " file specific pairs
+    augroup AutoPairs
+        autocmd!
+        autocmd FileType php let b:AutoPairs=AutoPairsDefine({'<?':'?>','<?php':'?>'})
+        autocmd FileType rust let b:AutoPairs=AutoPairsDefine({'\w\zs<':'>'})
+        autocmd FileType html let b:AutoPairs=AutoPairsDefine({'<':'>','<!--':'-->'})
+    augroup END
+endif
+
+" }}}
+
+" tabular {{{
+
+if exists(':Tabularize')
+
+    " tabular patterns goes here
+    AddTabularPattern! last_double_quote /"\ze[^"]*$/l1c1l0
+    AddTabularPattern! last_quote /'\ze[^']*$/l1c1l0
+
+    " align <bar> in insert mode
+    func! s:align()
+      let p = '^\s*|\s.*\s|\s*$'
+      if exists(':Tabularize') && getline('.') =~# '^\s*|' && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
+        let column = strlen(substitute(getline('.')[0:col('.')],'[^|]','','g'))
+        let position = strlen(matchstr(getline('.')[0:col('.')],'.*|\s*\zs.*'))
+        Tabularize/|/l1
+        normal! 0
+        call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
+      endif
+    endfunc
+
+    " tabular shortcuts goes here
+    nnoremap <leader>/ :Tabularize /
+    xnoremap <leader>/ :Tabularize /
+    inoremap <bar> <bar><esc>:call <sid>align()<cr>a
+endif
+
+" }}}
+
+" vim-airline {{{
+
+let g:airline_extensions = ['tabline', 'coc', 'branch']
+
+" }}}
+
+" vim-easymotion {{{
+
+if exists("g:EasyMotion_keys")
+    " ignore case when super moving
+    let g:EasyMotion_smartcase = 1
+
+    " trigger super move with \ + (vim default key)
+    map \ <plug>(easymotion-prefix)
+endif
+
+" }}}
+
+" LeaderF {{{
+
+
+
+" }}}
+
+" coc.nvim {{{
+
+if exists("g:CocEnable")
+    " always show notification column on the left
+    set signcolumn=yes
+
+    " use (shift-)tab to navigate
+    inoremap <silent><expr> <tab> coc#pum#visible() ? coc#pum#next(1) : "\<tab>"
+    inoremap <silent><expr> <s-tab> coc#pum#visible() ? coc#pum#prev(1) : "\<c-h>"
+
+    " use <cr> to confirm
+    inoremap <silent><expr> <cr> coc#pum#visible() ? coc#pum#confirm() : "\<cr>\<c-r>=coc#on_enter()\<cr>"
+endif
+
+" }}}
+
+" }}}
+" ==============================================================================
