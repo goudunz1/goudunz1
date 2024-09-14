@@ -1,4 +1,7 @@
 " Makefile
 
 " stupid Makefile syntax
-call SetIndex("tab", 8)
+set noexpandtab
+set shiftwidth=4
+set tabstop=4
+set softtabstop=4

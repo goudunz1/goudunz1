@@ -1,4 +1,4 @@
-" Vim Scripts
+" Vim
 
 " auto fold configuration groups
 setlocal foldmethod=marker

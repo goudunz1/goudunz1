@@ -93,7 +93,7 @@ Plug 'joshdick/onedark.vim'
 Plug 'liuchengxu/vista.vim', {'on': 'Vista'}
 
 " a modern fuzzy finder
-Plug 'Yggdroot/LeaderF', { 'on': 'Leaderf', 'do': ':LeaderfInstallCExtension' }
+Plug 'Yggdroot/LeaderF', {  'do': ':LeaderfInstallCExtension' }
 
 " navigation sidebar tree
 Plug 'preservim/nerdtree', { 'on': 'NERDTreeToggle' }
@@ -425,7 +425,8 @@ if exists(":Vista")
     let g:vista_default_executive = 'ctags'
     
     " shortcut to inspect symbols
-    nnoremap <leader>y :Vista!!<space>coc
+    nnoremap <leader>u :Vista<cr>
+    nnoremap <leader>U :Vista coc<cr>
     
     " close buffer if vista is the only buffer remaining
     augroup Vista
@@ -524,22 +525,22 @@ endif
 
 " LeaderF {{{
 
-
+let g:Lf_WindowPosition = 'popup'
 
 " }}}
 
 " coc.nvim {{{
 
-if exists("g:CocEnable")
+if exists(":CocEnable")
     " always show notification column on the left
     set signcolumn=yes
 
     " use (shift-)tab to navigate
-    inoremap <silent><expr> <tab> coc#pum#visible() ? coc#pum#next(1) : "\<tab>"
-    inoremap <silent><expr> <s-tab> coc#pum#visible() ? coc#pum#prev(1) : "\<c-h>"
+    inoremap <silent><expr> <tab> coc#pum#visible()?coc#pum#next(1):"\<tab>"
+    inoremap <silent><expr> <s-tab> coc#pum#visible()?coc#pum#prev(1):"\<c-h>"
 
     " use <cr> to confirm
-    inoremap <silent><expr> <cr> coc#pum#visible() ? coc#pum#confirm() : "\<cr>\<c-r>=coc#on_enter()\<cr>"
+    inoremap <silent><expr> <cr> coc#pum#visible()?coc#pum#confirm():"\<cr>\<c-r>=coc#on_enter()\<cr>"
 endif
 
 " }}}
