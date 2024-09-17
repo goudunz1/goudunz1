@@ -1,5 +1,3 @@
-#!/bin/bash
-
 alias q='exit'
 alias h='history'
 alias p='cat'
@@ -31,7 +29,7 @@ if [ $EUID -eq 0 ]; then
     command -v poweroff >/dev/null||alias poweroff='shutdown --poweroff now'
     command -v halt >/dev/null||alias halt='shutdown --halt now'
     command -v reboot >/dev/null||alias reboot='shutdown --reboot now'
-    alias pkg='apt-get'
+    alias pkg='apt'
     alias srv='systemctl'
 else
     command -v poweroff >/dev/null||alias poweroff='sudo shutdown --poweroff now'
