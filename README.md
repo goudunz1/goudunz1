@@ -12,6 +12,6 @@ These're some of the projects that I contributed to / am currently working on:
   debugging information; Varviewer can act as an auxiliary tool for Ghidra and
   IDA Pro to improve the results of disassembling and decompilation.
 
-- [Snake86](https://github.com/goudunz1/Snake86) a tiny hungry snake game
-  written in about 200 lines of pure MASM 8086 assembly code that runs on any
-  DOS systems
+- [Snake86](https://github.com/goudunz1/Snake86) a 2KB hungry snake game
+  written in about 200 lines of pure MASM 8086 assembly code; Snake86 can run
+  on any DOS systems and js-dos web environment.
