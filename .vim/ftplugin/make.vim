@@ -1,4 +1,4 @@
-" Makefile
+" filetype: make
 
 " stupid Makefile syntax
 set noexpandtab

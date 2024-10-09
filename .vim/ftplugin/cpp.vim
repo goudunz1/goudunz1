@@ -1,4 +1,4 @@
-" C/CPP
+" filetype: c/cpp
 
 " clang-format LLVM style
 set expandtab

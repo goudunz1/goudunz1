@@ -153,12 +153,12 @@ alias aptc='sudo apt-get autoremove --purge'
 
 # Alias for systemctl
 alias systemctl='sudo systemctl'
-alias sup='srv start'
-alias sdwn='srv stop'
-alias srst='srv restart'
-alias sen='srv enable'
-alias sdis='srv disable'
-alias schk='srv status'
+alias sup='sudo systemctl start'
+alias sdwn='sudo systemctl stop'
+alias srst='sudo systemctl restart'
+alias sen='sudo systemctl enable'
+alias sdis='sudo systemctl disable'
+alias schk='sudo systemctl status'
 
 # Alias for tarballs
 alias mktar='tar -cvf'
@@ -546,9 +546,6 @@ CYAN="\033[1;36m"
 LIGHTCYAN="\033[1;36m"
 NOCOLOR="\033[0m"
 
-# Date
-PROMPT="\[${NOCOLOR}\][\[${CYAN}\]$(date +%a\ %H:%M)\[${NOCOLOR}\]]"
-
 # User and server
 ssh_ip=`echo $SSH_CLIENT | awk '{ print $1 }'`
 ssh2_ip=`echo $SSH2_CLIENT | awk '{ print $1 }'`
@@ -574,10 +571,11 @@ __setprompt ()
     # Show error exit code if there is one
     local CODE=$? # should be the first command
 
+    # Date
+    PS1="\[${NOCOLOR}\][\[${CYAN}\]$(date +%a\ %H:%M)\[${NOCOLOR}\]]"$PROMPT
+
     if [[ $CODE != 0 ]]; then
-        PS1="\[${NOCOLOR}\][\[${LIGHTRED}\]$CODE\[${NOCOLOR}\]]"$PROMPT
-    else
-        PS1=$PROMPT
+        PS1="\[${NOCOLOR}\][\[${LIGHTRED}\]$CODE\[${NOCOLOR}\]]"$PS1
     fi
 }
 

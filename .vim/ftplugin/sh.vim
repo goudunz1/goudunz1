@@ -1,6 +1,6 @@
-" Shell
+" filetype: sh
 
-" execute text as shell script
+" execute text as shell script {{{
 function! s:exec_as_sh(str)
     let temp=tempname()
     let content=["#!/bin/sh"]+split(a:str,'\n')
@@ -9,8 +9,14 @@ function! s:exec_as_sh(str)
     exec ":!".temp
 endfunction
 
-" quick execute
-nnoremap <leader><leader>s :!source <c-r>=expand('%:p')<cr><cr>
-nnoremap <silent><buffer> <leader><cr> :!<c-r>=expand("%")<cr><cr>
-nnoremap <silent><buffer> <leader>x 0v$"+y:!<c-r>=@+<cr><cr>
-xnoremap <silent><buffer> <leader>x "+y:call <sid>exec_as_sh(getreg('+'))<cr>
+xnoremap <silent><buffer> \x "+y:call <sid>exec_as_sh(getreg('+'))<cr>
+" }}}
+
+" execute current file
+nnoremap <silent><buffer> \<cr> :!<c-r>=expand("%")<cr><cr>
+
+" execute current line as a command
+nnoremap <silent><buffer> \x 0v$"+y:!<c-r>=@+<cr><cr>
+
+" source shell script
+nnoremap <leader>S :!source <c-r>=expand('%:p')<cr><cr>

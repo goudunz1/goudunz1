@@ -1,6 +1,6 @@
-" Python
+" filetype: python
 
-" execute text as python
+" execute text as python {{{
 function! s:exec_as_python(str)
     let temp=tempname()
     let content=["#!/usr/bin/env python"]+split(a:str,'\n')
@@ -9,7 +9,13 @@ function! s:exec_as_python(str)
     exe ":!".temp
 endfunction
 
-" quick execute
-nnoremap <silent><buffer> <leader><cr> :!/usr/bin/env python <c-r>=expand("%")<cr><cr>
-nnoremap <silent><buffer> <leader>x 0v$"+y:call <sid>exec_as_python(getreg('+'))<cr>
-xnoremap <silent><buffer> <leader>x "+y:call <sid>exec_as_python(getreg('+'))<cr>
+" current line
+nnoremap <silent><buffer> \x 0v$"+y:call <sid>exec_as_python(getreg('+'))<cr>
+
+" selected area
+xnoremap <silent><buffer> \x "+y:call <sid>exec_as_python(getreg('+'))<cr>
+
+" }}}
+
+" execute current file
+nnoremap <silent><buffer> \<cr> :!/usr/bin/env python <c-r>=expand("%")<cr><cr>
