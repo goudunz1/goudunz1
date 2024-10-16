@@ -3,7 +3,9 @@
 " auto fold configuration groups
 setlocal foldmethod=marker
 
-" shortcuts for loading .vimrc and plugins
-nnoremap \S :source <c-r>=expand('%:p')<cr><cr>
-nnoremap \I :PlugInstall<cr>
-nnoremap \R :PlugClean<cr>
+" shortcuts for loading .vimrc
+nnoremap <silent><buffer> <leader>S :source <c-r>=expand('%:p')<cr><cr>
+
+" shortcuts for vim-plug
+nnoremap <silent><buffer> \I :PlugInstall<cr>
+nnoremap <silent><buffer> \R :PlugClean<cr>

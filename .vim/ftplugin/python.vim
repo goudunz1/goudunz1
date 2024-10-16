@@ -1,6 +1,7 @@
 " filetype: python
 
 " execute text as python {{{
+
 function! s:exec_as_python(str)
     let temp=tempname()
     let content=["#!/usr/bin/env python"]+split(a:str,'\n')

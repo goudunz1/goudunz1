@@ -1,0 +1,6 @@
+# cp default.custom.yaml ~/.local/share/fcitx5/rime/
+patch:
+  "menu/page_size": 8          # 候选词：8
+  schema_list:
+    - schema: luna_pinyin_simp # 明月拼音「简化字」
+    - schema: luna_pinyin      # 明月拼音

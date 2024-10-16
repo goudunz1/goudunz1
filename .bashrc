@@ -73,7 +73,7 @@ alias mv='mv -i'
 alias rm='rm -irv'
 alias mkdir='mkdir -p'
 alias md='mkdir -p'
-alias ps='ps auxf | less' # forest style processes
+alias ps='ps auxf | less -R' # forest style processes
 alias c='clear'
 alias cs='clear;ls'
 alias cls='clear'
@@ -82,7 +82,7 @@ alias quit='exit'
 alias h='history | less'
 alias hist='history | less'
 alias p='cat'
-alias l='less'
+alias l='less -R'
 alias f='find . | grep'
 alias k='kill'
 alias j='jobs'
@@ -110,7 +110,7 @@ alias lm='ls -alh |more' # pipe through 'more'
 alias lw='ls -xAh' # wide listing format
 alias ll='ls -Fls' # long listing format
 alias labc='ls -lap' #alphabetical sort
-alias lf="ls -l | egrep -v '^d'" # files only
+alias lfile="ls -l | egrep -v '^d'" # files only
 alias ldir="ls -l | egrep '^d'" # directories only
 
 # Alias chmod commands
@@ -144,7 +144,7 @@ alias fsort="du -S | sort -n -r | more"
 alias apt='sudo apt'
 alias apt-get='sudo apt-get'
 alias apth='cat /var/log/dpkg.log | less -R'
-alias aptl='sudo apt list --installed | less'
+alias aptl='sudo apt list --installed | less -R'
 alias apti='sudo apt-get install'
 alias aptu='sudo apt-get update'
 alias aptg='sudo apt-get upgrade'
@@ -170,6 +170,8 @@ alias ungz='tar -xvzf'
 
 # Alias for crypto
 alias sha1='openssl sha1'
+alias sha256='openssl sha256'
+alias sha512='openssl sha512'
 alias md5='md5sum'
 alias b64='base64'
 
@@ -435,6 +437,7 @@ whatsmyip ()
     # External IP Lookup
     echo -n "External IP: "
     wget https://myexternalip.com/raw -O - -q
+    echo ""
 }
 
 # View Apache logs
@@ -546,13 +549,19 @@ CYAN="\033[1;36m"
 LIGHTCYAN="\033[1;36m"
 NOCOLOR="\033[0m"
 
+if [[ $EUID -ne 0 ]]; then
+    PROMPT="\[${NOCOLOR}\][\[${LIGHTBLUE}\]"
+else
+    PROMPT="\[${NOCOLOR}\][\[${LIGHTRED}\]"
+fi
+
 # User and server
 ssh_ip=`echo $SSH_CLIENT | awk '{ print $1 }'`
 ssh2_ip=`echo $SSH2_CLIENT | awk '{ print $1 }'`
 if [ $ssh2_ip ] || [ $ssh_ip ] ; then
-    PROMPT+="\[${NOCOLOR}\][\[${LIGHTBLUE}\]\u@\h\[${NOCOLOR}\]㉿"
+    PROMPT+="\u@\h\[${NOCOLOR}\]㉿"
 else
-    PROMPT+="\[${NOCOLOR}\][\[${LIGHTBLUE}\]\u\[${NOCOLOR}\]㉿"
+    PROMPT+="\u\[${NOCOLOR}\]㉿"
 fi
 unset ssh_ip
 unset ssh2_ip
@@ -572,7 +581,7 @@ __setprompt ()
     local CODE=$? # should be the first command
 
     # Date
-    PS1="\[${NOCOLOR}\][\[${CYAN}\]$(date +%a\ %H:%M)\[${NOCOLOR}\]]"$PROMPT
+    PS1="\[${NOCOLOR}\][\[${BROWN}\]$(date +%a\ %H:%M)\[${NOCOLOR}\]]"$PROMPT
 
     if [[ $CODE != 0 ]]; then
         PS1="\[${NOCOLOR}\][\[${LIGHTRED}\]$CODE\[${NOCOLOR}\]]"$PS1

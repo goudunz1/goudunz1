@@ -153,12 +153,12 @@ noremap j gj
 noremap k gk
 
 " switch between fold methods
-nnoremap <silent> \z :let &l:fdm=&l:fdm=="marker"?"indent":"marker"<cr>
-xnoremap <silent> \z :let &l:fdm=&l:fdm=="marker"?"indent":"marker"<cr>
+nnoremap <silent> <leader>m :let &l:fdm=&l:fdm=="marker"?"indent":"marker"<cr>
+xnoremap <silent> <leader>m :let &l:fdm=&l:fdm=="marker"?"indent":"marker"<cr>
 
-" auto fold with <enter> and <bs>
-nnoremap <silent><nowait> <expr><enter> foldlevel('.')>0?"zo":"\<enter>"
-nnoremap <silent><nowait> <expr><bs> foldlevel('.')>0?"zc":"\<bs>"
+" auto fold with <space> and <bs>
+nmap <silent><nowait> <expr><space> foldlevel('.')>0?"zo":"\<space>"
+nmap <silent><nowait> <expr><bs> foldlevel('.')>0?"zc":"\<bs>"
 
 " }}}
 
@@ -167,7 +167,6 @@ nnoremap <silent><nowait> <expr><bs> foldlevel('.')>0?"zc":"\<bs>"
 " toggle search pattern highlight
 nnoremap <silent> <leader>h :noh<cr>
 xnoremap <silent> <leader>h :noh<cr>
-
 
 " find keywords downwards, example: ve/
 xnoremap <silent> / "sy/\V\<<c-r>=@s<cr>\><cr>
@@ -277,7 +276,7 @@ func! s:close_buf() abort
             let last_nr = buf_jump_list[buf_jump_now]["bufnr"]
             let last_line = buf_jump_list[buf_jump_now]["lnum"]
             if buf_now != last_nr && bufloaded(last_nr) &&
-                        \getbufvar(last_nr, "&bt")==''
+                        \getbufvar(last_nr, "&bt") == ''
                 execute ":b ".last_nr
                 execute ":bd ".buf_now
                 return
@@ -351,10 +350,14 @@ nnoremap \<c-b> <c-w>p<c-b><c-w>p
 nnoremap \<c-y> <c-w>p<c-y><c-w>p
 nnoremap \<c-e> <c-w>p<c-e><c-w>p
 
+
 " scroll with cursor (in the other window)
 nnoremap \zz <c-w>pzz<c-w>p
 nnoremap \zt <c-w>pzt<c-w>p
 nnoremap \zb <c-w>pzb<c-w>p
+
+" 'man' instead of two words 'vert help'
+cnoreab man vert help
 
 " }}}
 
@@ -403,24 +406,26 @@ command! -complete=shellcmd -nargs=+ Run exec "vert term ".<q-args>
 " use AsyncRun instead, the result will be stored in quickfix
 cnoreab bang AsyncRun
 
+" TODO: take over vim in terminal
+
 " }}}
 
 " code cleanup {{{
 
 " unhide control characters
-nnoremap <silent> <leader>l :let &l:list=!&l:list<cr>
-xnoremap <silent> <leader>l :let &l:list=!&l:list<cr>
+nnoremap <silent> <leader>i :let &l:list=!&l:list<cr>
+xnoremap <silent> <leader>i :let &l:list=!&l:list<cr>
 
 " highlight all trailing spaces
 match DiffDelete /\v\s+$/
 
 " erase trailing spaces, example ggvG\d<space>
 nnoremap <silent> d<space> :s/\v\s+$//<cr>:noh<cr><c-o>
-xnoremap <silent> \d<space> :s/\v\s+$//<cr>:noh<cr><c-o>
+xnoremap <silent> <leader>d<space> :s/\v\s+$//<cr>:noh<cr><c-o>
 
 " erase empty lines, example: ggvG\d<cr>
 nnoremap <silent> d<cr> :/^\s*$/d<cr>:noh<cr>
-xnoremap <silent> \d<cr> :/^\s*$/d<cr>:noh<cr>
+xnoremap <silent> <leader>d<cr> :/^\s*$/d<cr>:noh<cr>
 
 " clear the current line
 nnoremap dc d0d$
@@ -460,6 +465,8 @@ xnoremap <tab> >gv
 nnoremap <s-tab> <<
 xnoremap <s-tab> <gv
 
+" TODO: convert front tabs to tabwidth spaces and vice versa
+
 " press <leader> then hold <space> to add more spaces, <esc> to stop
 nnoremap <silent> <leader><space> i<space><c-[>
             \:while getchar()==32<bar>
@@ -483,8 +490,7 @@ nnoremap <silent> <leader>O :call append(line('.')-1,"")<cr>
             \endwhile<cr>
 
 " insert empty lines in normal mode
-nnoremap <silent> \o :call append(line('.'),"")<cr>
-nnoremap <silent> \O :call append(line('.')-1,"")<cr>
+nnoremap <silent> <enter> :call append(line('.'),"")<cr>j
 
 " }}}
 
@@ -608,7 +614,7 @@ nnoremap <silent> <c-n> :cnext<cr>
 xnoremap <silent> <c-n> :cnext<cr>
 
 " TODO: <leader>+C to toggle quickfix popup menu
-func! s:qfpopup()abort
+func! s:qfpopup() abort
 endfunc
 
 nnoremap <leader>C :call <sid>qfpopup()<cr>
@@ -618,9 +624,7 @@ nnoremap <leader>C :call <sid>qfpopup()<cr>
 
 " shortcuts to open up a vimdiff window
 command! -nargs=1 -bang -complete=file Diff exec ":vert diffsplit ".<q-args>
-cnoreab <expr> diff "Diff ".expand('%:p:h')
-
-" TODO: more vimdiff utils
+cnoreab <expr> diff "Diff ".expand('%:p').".bak"
 
 " }}}
 
@@ -637,17 +641,31 @@ nnoremap <f6> :Break<cr>
 nnoremap <f7> :Over<cr>
 nnoremap <f8> :Step<cr>
 
-" TODO: more termdebug utils
-
 " }}}
 
-" TODO: fzf/lf/gitgutter support
+" TODO: fzf/lf/lazygit support
+
+" TODO: hexedit
+
+" TODO: timer monitor
+
+" TODO: vim-markdown
+
+" TODO: examine key binding
+
+" TODO: gitgutter
+
+" TODO: vim-textobj
 
 " }}}
 " ==============================================================================
 
 " ==============================================================================
 " [plugin settings] {{{
+
+" TODO: vim-precode
+
+" TODO: vim-dashboard
 
 " NERDTree {{{
 
@@ -663,7 +681,8 @@ nnoremap <leader>n :NERDTreeToggle<cr>
 " TODO:delete buffer if NERDTree is the only buffer remaining
 augroup NERDTree
     autocmd!
-    autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | bd | endif
+    autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') &&
+                \b:NERDTree.isTabTree() | bd | endif
 augroup END
 
 " }}}
@@ -677,13 +696,14 @@ let g:vista#renderer#enable_icon=1
 let g:vista_default_executive='ctags'
 
 " shortcut to inspect symbols
-nnoremap <leader>u :Vista coc<cr>
-nnoremap <leader>U :Vista!!<cr>
+nnoremap <silent> <leader>L :Vista coc<cr>
+nnoremap <silent> <leader>l :Vista!!<cr>
 
 " TODO:delete buffer if vista is the only buffer remaining
 augroup Vista
 	autocmd!
-	autocmd BufEnter * if (&ft == 'vista' || &ft == 'vista_markdown') && winnr('$') == 1 | bd | endif
+	autocmd BufEnter * if (&ft == 'vista' || &ft == 'vista_markdown') &&
+                \winnr('$') == 1 | bd | endif
 augroup END
 
 " }}}
@@ -701,11 +721,12 @@ let g:Lf_WindowPosition = 'popup'
 set signcolumn=yes
 
 " use (shift-)tab to navigate
-inoremap <silent><expr> <tab> coc#pum#visible() ? coc#pum#next(1) : "\<tab>"
-inoremap <silent><expr> <s-tab> coc#pum#visible() ? coc#pum#prev(1) : "\<c-h>"
+inoremap <silent><expr> <tab> coc#pum#visible()?coc#pum#next(1):"\<tab>"
+inoremap <silent><expr> <s-tab> coc#pum#visible()?coc#pum#prev(1):"\<c-h>"
 
 " use <cr> to confirm
-inoremap <silent><expr> <cr> coc#pum#visible() ? coc#pum#confirm() : "\<cr>\<c-r>=coc#on_enter()\<cr>"
+inoremap <silent><expr> <cr> coc#pum#visible()?coc#pum#confirm():
+            \"\<cr>\<c-r>=coc#on_enter()\<cr>"
 
 " }}}
 
@@ -779,6 +800,7 @@ let g:vim_current_word#highlight_only_in_focused_window = 1
 " disable cword in certain buffers
 autocmd BufAdd NERD_tree_* :let b:vim_current_word_disabled_in_this_buffer = 1
 
+" define cword highlight here
 hi link CurrentWord DiffText
 hi link CurrentWordTwins DiffChange
 
