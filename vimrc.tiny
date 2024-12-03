@@ -10,7 +10,7 @@ let g:email = "goudunz1@outlook.com"
 let g:default_browser = "firefox"
 iabbrev <expr> @@n g:author
 iabbrev <expr> @@e g:email
-colorscheme industry
+colorscheme sorbet
 
 " ==============================================================================
 " [vim options] {{{

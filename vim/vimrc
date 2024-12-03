@@ -11,7 +11,7 @@ let g:email = "goudunz1@outlook.com"
 let g:default_browser = "firefox"
 iabbrev <expr> @@n g:author
 iabbrev <expr> @@e g:email
-colorscheme industry
+colorscheme sorbet
 
 " ==============================================================================
 " [vim options] {{{
@@ -84,13 +84,13 @@ Plug 'liuchengxu/vista.vim', { 'on': 'Vista' }
 Plug 'honza/vim-snippets'
 
 " navigation sidebar tree
-Plug 'preservim/nerdtree', { 'on': 'NERDTreeToggle' }
+" Plug 'preservim/nerdtree', { 'on': 'NERDTreeToggle' }
 
 " better command line prompt
-Plug 'vim-airline/vim-airline'
+" Plug 'vim-airline/vim-airline'
 
 " more icons (require nerd fonts)
-Plug 'ryanoasis/vim-devicons'
+" Plug 'ryanoasis/vim-devicons'
 
 " lazy vim movement
 Plug 'easymotion/vim-easymotion'
@@ -667,25 +667,25 @@ nnoremap <f8> :Step<cr>
 
 " TODO: vim-dashboard
 
-" NERDTree {{{
-
-" NERDTree sidebar width
-let g:NERDTreeWinSize=28
-
-" show all hidden files and folders
-let g:NERDTreeShowHidden=1
-
-" shortcut to open sidebar
-nnoremap <leader>n :NERDTreeToggle<cr>
-
-" TODO:delete buffer if NERDTree is the only buffer remaining
-augroup NERDTree
-    autocmd!
-    autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') &&
-                \b:NERDTree.isTabTree() | bd | endif
-augroup END
-
-" }}}
+" " NERDTree {{{
+" 
+" " NERDTree sidebar width
+" let g:NERDTreeWinSize=28
+" 
+" " show all hidden files and folders
+" let g:NERDTreeShowHidden=1
+" 
+" " shortcut to open sidebar
+" nnoremap <leader>n :NERDTreeToggle<cr>
+" 
+" " TODO:delete buffer if NERDTree is the only buffer remaining
+" augroup NERDTree
+"     autocmd!
+"     autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') &&
+"                 \b:NERDTree.isTabTree() | bd | endif
+" augroup END
+" 
+" " }}}
 
 " vista.vim {{{
 
@@ -730,12 +730,12 @@ inoremap <silent><expr> <cr> coc#pum#visible()?coc#pum#confirm():
 
 " }}}
 
-" vim-airline {{{
-
-" airline modules
-let g:airline_extensions = ['tabline', 'coc', 'branch']
-
-" }}}
+" " vim-airline {{{
+" 
+" " airline modules
+" let g:airline_extensions = ['tabline', 'coc', 'branch']
+" 
+" " }}}
 
 " vim-easymotion {{{
 

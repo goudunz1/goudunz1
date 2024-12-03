@@ -577,7 +577,7 @@ else
     PROMPT+="#\[${NOCOLOR}\] " # Root user
 fi
 
-__setprompt ()
+__my_prompt ()
 {
     # Show error exit code if there is one
     local CODE=$? # should be the first command
@@ -590,14 +590,4 @@ __setprompt ()
     fi
 }
 
-PROMPT_COMMAND='__setprompt'
-
-# PS2 is used to continue a command using the \ character
-PS2="\[${NOCOLOR}\]>\[${NOCOLOR}\] "
-
-# PS3 is used to enter a number choice in a script
-PS3='Please enter a number from above list: '
-
-# PS4 is used for tracing a script in debug mode
-PS4="\[${NOCOLOR}\]+\[${NOCOLOR}\] "
-
+#PROMPT_COMMAND='__my_prompt'
