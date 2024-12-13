@@ -149,12 +149,11 @@ noremap k gk
 nnoremap <silent> <leader>m :let &l:fdm=&l:fdm=="marker"?"indent":"marker"<cr>
 xnoremap <silent> <leader>m :let &l:fdm=&l:fdm=="marker"?"indent":"marker"<cr>
 
-" insert empty lines in normal mode
-"nnoremap <silent> <space> :call append(line('.'),"")<cr>j
+" open a closed fold with <enter>
+" insert an empty line otherwise
+nmap <silent><nowait> <expr><enter> foldclosed('.')>0?"zo":"o\<esc>"
 
-" auto fold with <space> and <bs>
-" TODO bugs
-nmap <silent><nowait> <expr><enter> foldlevel('.')>0?"zo":"o\<esc>"
+" close an open fold with <bs>
 nmap <silent><nowait> <expr><bs> foldlevel('.')>0?"zc":"\<bs>"
 
 " }}}
@@ -174,6 +173,12 @@ xnoremap <silent> ? "sy?\V\<<c-r>=@s<cr>\><cr>
 " replace keyword with <f2>, note that register s will be used!
 xnoremap <f2> "sy/\V\<<c-r>=@s<cr>\><cr><c-o>:%s/\V\<<c-r>=@s<cr>\>/
 
+" jump and centralize
+nnoremap n nzz
+xnoremap n nzz
+nnoremap N Nzz
+xnoremap N Nzz
+
 " }}}
 
 " selection {{{
@@ -181,22 +186,14 @@ xnoremap <f2> "sy/\V\<<c-r>=@s<cr>\><cr><c-o>:%s/\V\<<c-r>=@s<cr>\>/
 " extend matching with '%'
 packadd! matchit
 
-" deprecated, use matchit plugin instead
-" locate nearest { below
-"nnoremap <silent> <leader>{ /{<cr>:noh<cr>va}
-"xnoremap <silent> <leader>{ <c-[>/{<cr>:noh<cr>va}
-
-" locate nearest } above
-"nnoremap <silent> <leader>} ?}<cr>:noh<cr>va{
-"xnoremap <silent> <leader>} <c-[>?}<cr>:noh<cr>va{
-
 " move selected area upward/downward
+" Note that there could be bugs moving across a fold
 xnoremap <silent> <c-k> :move '<-2<cr>gv
 xnoremap <silent> <c-j> :move '>+1<cr>gv
 
 " move selected area to window on the left/right
-xnoremap <c-h> y<c-w>hi<c-[>vpgv
-xnoremap <c-l> y<c-w>li<c-[>vpgv
+xnoremap <c-h> y<c-w>hPgv:undoj<cr>
+xnoremap <c-l> y<c-w>lPgv:undoj<cr>
 
 " }}}
 
@@ -399,11 +396,7 @@ xnoremap <silent> <leader>X :tabe<cr>:call term_start("bash",
 
 " run async tasks with 'vert term'
 command! -complete=shellcmd -nargs=+ Run exec "vert term ".<q-args>
-"cnoreab bang Run
-" use AsyncRun instead, the result will be stored in quickfix
-cnoreab bang AsyncRun
-
-" TODO: take over vim in terminal
+cnoreab bang Run
 
 " }}}
 
@@ -419,10 +412,6 @@ match DiffDelete /\v\s+$/
 " erase trailing spaces, example ggvG\d<space>
 nnoremap <silent> d<space> :s/\v\s+$//<cr>:noh<cr><c-o>
 xnoremap <silent> <leader>d<space> :s/\v\s+$//<cr>:noh<cr><c-o>
-
-" erase empty lines, example: ggvG\d<cr>
-nnoremap <silent> d<cr> :/^\s*$/d<cr>:noh<cr>
-xnoremap <silent> <leader>d<cr> :/^\s*$/d<cr>:noh<cr>
 
 " clear the current line
 nnoremap dc d0d$
@@ -462,8 +451,6 @@ xnoremap <tab> >gv
 nnoremap <s-tab> <<
 xnoremap <s-tab> <gv
 
-" TODO: convert front tabs to tabwidth spaces and vice versa
-
 " press <leader> then hold <space> to add more spaces, <esc> to stop
 nnoremap <silent> <leader><space> i<space><c-[>
             \:while getchar()==32<bar>
@@ -472,19 +459,23 @@ nnoremap <silent> <leader><space> i<space><c-[>
             \redraw<bar>
             \endwhile<cr>
 
-" press <leader> then hold o/O to add empty lines, <esc> to stop
+" press <leader> then hold o to add empty lines, <esc> to stop
 nnoremap <silent> <leader>o :call append(line('.'),"")<cr>
             \:while getchar()==111<bar>
             \undoj<bar>
             \call append(line('.'),"")<bar>
             \redraw<bar>
             \endwhile<cr>
+
+" do the same as above when holding O, but upwards
 nnoremap <silent> <leader>O :call append(line('.')-1,"")<cr>
             \:while getchar()==79<bar>
             \undoj<bar>
             \call append(line('.')-1,"")<bar>
             \redraw<bar>
             \endwhile<cr>
+
+" TODO: convert front tabs to tabwidth spaces and vice versa
 
 " }}}
 
@@ -612,6 +603,7 @@ func! s:qfpopup() abort
 endfunc
 
 nnoremap <leader>C :call <sid>qfpopup()<cr>
+
 " }}}
 
 " vim diff {{{
@@ -702,6 +694,8 @@ inoremap <silent><expr> <s-tab> coc#pum#visible()?coc#pum#prev(1):"\<c-h>"
 inoremap <silent><expr> <cr> coc#pum#visible()?coc#pum#confirm():
             \"\<cr>\<c-r>=coc#on_enter()\<cr>"
 
+" TODO more coc settings
+
 " }}}
 
 " vim-easymotion {{{
@@ -725,13 +719,13 @@ let g:AutoPairsMapCR=0
 
 " tabular {{{
 
-" tabularize the last " (for vim scripts)
+" tabularize the last " (eg. vim scripts)
 nnoremap <leader>" :Tabularize<space>/"\ze[^"]*$/l1c1l0<cr>
 xnoremap <leader>" :Tabularize<space>/"\ze[^"]*$/l1c1l0<cr>
 
-" tabularize the last # (for python)
-nnoremap <leader># :Tabularize<space>/"\ze[^#]*$/l1c1l0<cr>
-xnoremap <leader># :Tabularize<space>/"\ze[^#]*$/l1c1l0<cr>
+" tabularize the last # (eg. python)
+nnoremap <leader># :Tabularize<space>/#\ze[^#]*$/l1c1l0<cr>
+xnoremap <leader># :Tabularize<space>/#\ze[^#]*$/l1c1l0<cr>
 
 " tabularize a regex
 nnoremap <leader>/ :Tabularize /
