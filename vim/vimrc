@@ -11,7 +11,6 @@ let g:email = "goudunz1@outlook.com"
 let g:default_browser = "firefox"
 iabbrev <expr> @@n g:author
 iabbrev <expr> @@e g:email
-colorscheme sorbet
 
 " ==============================================================================
 " [vim options] {{{
@@ -49,6 +48,7 @@ set shiftwidth=4                " use 4 spaces for auto shift
 set tabstop=4                   " set width of tab to 4
 set softtabstop=4               " use 4 spaces for a soft tab
 set smarttab                    " smartly shift with tabs and spaces
+set foldmethod=marker           " auto fold with marker pairs
 
 set nowrap                      " disable line wrap if cursor too right
 set sidescroll=1                " set number of columns to move if cursor too right
@@ -74,6 +74,9 @@ set confirm                     " raise a dialog when saving
 
 call plug#begin('~/.vim/plugged')
 
+" onedark theme
+Plug 'joshdick/onedark.vim'
+
 " modern auto completion plugin based on LSP servers
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 
@@ -82,15 +85,6 @@ Plug 'liuchengxu/vista.vim', { 'on': 'Vista' }
 
 " insert snippets quickly in vim (works together with coc-snippets)
 Plug 'honza/vim-snippets'
-
-" navigation sidebar tree
-" Plug 'preservim/nerdtree', { 'on': 'NERDTreeToggle' }
-
-" better command line prompt
-" Plug 'vim-airline/vim-airline'
-
-" more icons (require nerd fonts)
-" Plug 'ryanoasis/vim-devicons'
 
 " lazy vim movement
 Plug 'easymotion/vim-easymotion'
@@ -118,9 +112,6 @@ Plug 'rhysd/clever-f.vim'
 Plug 'tpope/vim-fugitive', { 'on': ['Git', 'GV', 'GV!']}
 Plug 'junegunn/gv.vim', { 'on': ['Git', 'GV', 'GV!']}
 
-" run async task
-Plug 'skywind3000/asyncrun.vim'
-
 " highlight all word occurrences
 Plug 'dominikduda/vim_current_word'
 
@@ -128,6 +119,8 @@ call plug#end()
 
 " }}}
 " ==============================================================================
+
+colorscheme onedark
 
 " ==============================================================================
 " [user scripts] {{{
@@ -156,8 +149,12 @@ noremap k gk
 nnoremap <silent> <leader>m :let &l:fdm=&l:fdm=="marker"?"indent":"marker"<cr>
 xnoremap <silent> <leader>m :let &l:fdm=&l:fdm=="marker"?"indent":"marker"<cr>
 
+" insert empty lines in normal mode
+"nnoremap <silent> <space> :call append(line('.'),"")<cr>j
+
 " auto fold with <space> and <bs>
-nmap <silent><nowait> <expr><space> foldlevel('.')>0?"zo":"\<space>"
+" TODO bugs
+nmap <silent><nowait> <expr><enter> foldlevel('.')>0?"zo":"o\<esc>"
 nmap <silent><nowait> <expr><bs> foldlevel('.')>0?"zc":"\<bs>"
 
 " }}}
@@ -489,9 +486,6 @@ nnoremap <silent> <leader>O :call append(line('.')-1,"")<cr>
             \redraw<bar>
             \endwhile<cr>
 
-" insert empty lines in normal mode
-nnoremap <silent> <enter> :call append(line('.'),"")<cr>j
-
 " }}}
 
 " lazy cmode {{{
@@ -667,26 +661,6 @@ nnoremap <f8> :Step<cr>
 
 " TODO: vim-dashboard
 
-" " NERDTree {{{
-" 
-" " NERDTree sidebar width
-" let g:NERDTreeWinSize=28
-" 
-" " show all hidden files and folders
-" let g:NERDTreeShowHidden=1
-" 
-" " shortcut to open sidebar
-" nnoremap <leader>n :NERDTreeToggle<cr>
-" 
-" " TODO:delete buffer if NERDTree is the only buffer remaining
-" augroup NERDTree
-"     autocmd!
-"     autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') &&
-"                 \b:NERDTree.isTabTree() | bd | endif
-" augroup END
-" 
-" " }}}
-
 " vista.vim {{{
 
 " enable vista icons
@@ -730,13 +704,6 @@ inoremap <silent><expr> <cr> coc#pum#visible()?coc#pum#confirm():
 
 " }}}
 
-" " vim-airline {{{
-" 
-" " airline modules
-" let g:airline_extensions = ['tabline', 'coc', 'branch']
-" 
-" " }}}
-
 " vim-easymotion {{{
 
 " ignore case when super moving
@@ -759,19 +726,16 @@ let g:AutoPairsMapCR=0
 " tabular {{{
 
 " tabularize the last " (for vim scripts)
-nnoremap <leader>/" :Tabularize<space>/"\ze[^"]*$/l1c1l0<cr>
-xnoremap <leader>/" :Tabularize<space>/"\ze[^"]*$/l1c1l0<cr>
+nnoremap <leader>" :Tabularize<space>/"\ze[^"]*$/l1c1l0<cr>
+xnoremap <leader>" :Tabularize<space>/"\ze[^"]*$/l1c1l0<cr>
 
 " tabularize the last # (for python)
-nnoremap <leader>/# :Tabularize<space>/"\ze[^#]*$/l1c1l0<cr>
-xnoremap <leader>/# :Tabularize<space>/"\ze[^#]*$/l1c1l0<cr>
+nnoremap <leader># :Tabularize<space>/"\ze[^#]*$/l1c1l0<cr>
+xnoremap <leader># :Tabularize<space>/"\ze[^#]*$/l1c1l0<cr>
 
 " tabularize a regex
 nnoremap <leader>/ :Tabularize /
 xnoremap <leader>/ :Tabularize /
-
-" TODO: align <bar> in insert mode
-"inoremap <bar> <bar><esc>:call <sid>align_bar()<cr>a
 
 " }}}
 
@@ -797,12 +761,8 @@ xmap <silent><nowait> ; <Plug>(clever-f-repeat-forward)
 " highlight only in focused window
 let g:vim_current_word#highlight_only_in_focused_window = 1
 
-" disable cword in certain buffers
-autocmd BufAdd NERD_tree_* :let b:vim_current_word_disabled_in_this_buffer = 1
-
-" define cword highlight here
-hi link CurrentWord DiffText
-hi link CurrentWordTwins DiffChange
+hi link CurrentWord Underlined
+hi link CurrentWordTwins Underlined
 
 " }}}
 
