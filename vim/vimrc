@@ -1,3 +1,4 @@
+" vim: fdm=marker :
 " ==============================================================================
 " File: vimrc
 " Author: goudunz1
@@ -48,7 +49,7 @@ set shiftwidth=4                " use 4 spaces for auto shift
 set tabstop=4                   " set width of tab to 4
 set softtabstop=4               " use 4 spaces for a soft tab
 set smarttab                    " smartly shift with tabs and spaces
-set foldmethod=marker           " auto fold with marker pairs
+"set foldmethod=marker           " auto fold with marker pairs
 
 set nowrap                      " disable line wrap if cursor too right
 set sidescroll=1                " set number of columns to move if cursor too right
@@ -682,6 +683,9 @@ let g:Lf_WindowPosition = 'popup'
 " }}}
 
 " coc.nvim {{{
+
+" use nvm to manage node versions
+let g:coc_node_path = '~/.nvm/versions/node/v23.3.0/bin/node'
 
 " always show notification column on the left
 set signcolumn=yes

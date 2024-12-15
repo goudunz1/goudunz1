@@ -1,25 +1,84 @@
-#!/bin/bash
-# File: bashrc
+#!/bin/sh
+# vim: fdm=marker :
+
+# File: profile
 # Author: goudunz1
 # Email: goudunz1@outlook.com
 # Inspired by zachbrowne's bashrc
 # https://gist.github.com/zachbrowne
-# Source this file in auto-generated bashrc
+# Source this file in auto-generated profile
 
 ################################################################################
-# Terminal Options {{{
+# Program Environments {{{
 
-# If not running interactively, don't do anything
-if [[ $(expr index $- i) -eq 0 ]]; then
+# Find latest version
+findver() { # {{{
+    if [ -d $1 ]; then
+        echo $(ls -1A $1 | tail -n 1 | sed "s/\\///g")
+    fi
+} # }}}
+
+# pyenv {{{
+export PYENV_ROOT=~/.pyenv
+command -v pyenv > /dev/null || if [ -d $PYENV_ROOT ]; then
+    export PATH=$PYENV_ROOT/bin:$PATH
+    eval "$(pyenv init -)"
+fi
+# }}}
+
+# venv {{{
+export VENV_ROOT=~/.venv
+command -v activate > /dev/null || if [ -d $VENV_ROOT ]; then
+    activate() {
+        . "$VENV_ROOT/$1/bin/activate"
+    }
+fi
+# }}}
+
+# node.js (nvm) {{{
+export NVM_DIR=~/.nvm
+command -v nvm > /dev/null || if [ -d $NVM_DIR ]; then
+    [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" > /dev/null
+    [ -n "$BASH_VERSION" ] && [ -s "$NVM_DIR/bash_completion" ] && \
+        . "$NVM_DIR/bash_completion" > /dev/null
+fi
+# }}}
+
+# Android SDK {{{
+export ANDROID_HOME=/opt/android-sdk
+command -v adb > /dev/null || if [ -d $ANDROID_HOME ]; then
+    # Android Emulator
+    export PATH="$PATH:$ANDROID_HOME/emulator"
+    # Platform Tools
+    export PATH="$PATH:$ANDROID_HOME/platform-tools"
+    # Native Development Kit
+    NDK="$ANDROID_HOME/ndk"
+    NDK_VER=$(findver $NDK)
+    if [ -n $NDK_VER ]; then
+        export PATH="$PATH:$NDK/$NDK_VER"
+    fi
+    # Command Line Tools
+    CTOOLS="$ANDROID_HOME/cmdline-tools"
+    CTOOLS_VER=$(findver $CTOOLS)
+    if [ -n $CTOOLS_VER ]; then
+        export PATH="$PATH:$CTOOLS/$CTOOLS_VER"
+    fi
+    # Command Line Tools
+    BTOOLS="$ANDROID_HOME/build-tools"
+    BTOOLS_VER=$(findver $BTOOLS)
+    if [ -n $BTOOLS_VER ]; then
+        export PATH="$PATH:$BTOOLS/$BTOOLS_VER"
+    fi
+fi
+# }}}
+
+# }}}
+################################################################################
+
+# If not running interactively, only set program PATH
+if [ $(expr index $- i) -eq 0 ]; then
     return
 fi
-
-# See `man readline` for more readline variables
-bind "set bell-style visible"           # mute
-bind "set colored-completion-prefix on" # colorize prefix
-bind "set colored-stats on"             # colorize file type(stat)
-bind "set completion-ignore-case on"    # ignore alphabetical case
-bind "set completion-map-case on"       # mix hyphens & underscores
 
 # ctrl-S, ctrl-R for i-search and reverse-i-search
 stty -ixon
@@ -32,9 +91,6 @@ stty -ixon
 # default editor: vim
 export EDITOR=vim
 export VISUAL=vim
-
-# }}}
-################################################################################
 
 ################################################################################
 # Pseudo-commands {{{
@@ -159,11 +215,9 @@ mdgo() { # {{{
 # Goes up a specified number of directories (eg. up 4)
 up() { # {{{
     local d=""
-    limit=$1
-    for ((i=1 ; i <= limit ; i++))
-        do
-            d=$d/..
-        done
+    for i in {1..$1}; do
+        d=$d/..
+    done
     d=$(echo $d | sed 's/^\///')
     if [ -z "$d" ]; then
         d=..
@@ -186,13 +240,6 @@ trim() { # {{{
     var="${var#"${var%%[![:space:]]*}"}"  # for leading
     var="${var%"${var##*[![:space:]]}"}"  # for trailing
     echo -n "$var"
-} # }}}
-
-# Find latest version
-findver() { # {{{
-    if [[ -d $1 ]]; then
-        echo $(ls -1A $1 | tail -n 1 | sed "s/\\///g")
-    fi
 } # }}}
 
 # (Un)set HTTP proxy to localhost:<port>
@@ -251,7 +298,7 @@ a2cfg () { # {{{
     elif [ -f /etc/apache2/apache2.conf ]; then
         cfg=/etc/apache2/apache2.conf
     fi
-    if [[ -n $cfg ]]; then
+    if [ -f "$cfg" ]; then
         $EDITOR $cfg
     else
         echo "Error: Apache config file could not be found."
@@ -272,7 +319,7 @@ phpcfg() { # {{{
     elif [ -f /etc/php5/apache2/php.ini ]; then
         cfg=/etc/php5/apache2/php.ini
     fi
-    if [[ -n $cfg ]]; then
+    if [ -f "$cfg" ]; then
         $EDITOR $cfg
     else
         echo "Error: php.ini file could not be found."
@@ -295,92 +342,12 @@ mysqlcfg () { # {{{
     elif [ -f ~/.my.cnf ]; then
         cfg=~/.my.cnf
     fi
-    if [[ -n $cfg ]]; then
+    if [ -f "$cfg" ]; then
         $EDITOR $cfg
     else
         echo "Error: my.cnf file could not be found."
     fi
 } # }}}
-
-# }}}
-################################################################################
-
-################################################################################
-# Program Environments {{{
-
-if [[ -z $SOURCED ]]; then
-
-    export SOURCED=1
-
-# pyenv {{{
-    export PYENV_ROOT=~/.pyenv
-    if [[ -d $PYENV_ROOT ]]; then
-        export PATH=$PYENV_ROOT/bin:$PATH
-        eval "$(pyenv init -)"
-    fi
-# }}}
-
-# venv {{{
-    export VENV_ROOT=~/.venv
-    if [ -d $VENV_ROOT ]; then
-        activate() {
-            . "$VENV_ROOT/$1/bin/activate"
-        }
-    fi
-# }}}
-
-# node.js (nvm) {{{
-    export NVM_DIR=~/.nvm
-    if [ -d $NVM_DIR ]; then
-        [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-        [ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"
-    fi
-# }}}
-
-# ruby (gem) {{{
-    RUBY_LOCAL=~/.local/share/gem/ruby
-    if [[ -d $RUBY_LOCAL ]]; then
-        RUBY_VER=$(findver $RUBY_LOCAL)
-        if [[ -n $RUBY_VER ]]; then
-            export PATH="$RUBY_LOCAL/$RUBY_VER/bin:$PATH"
-        fi
-    fi
-# }}}
-
-# Android SDK {{{
-    export ANDROID_HOME=/opt/android-sdk
-    if [[ -d $ANDROID_HOME ]]; then
-
-        # Android Emulator
-        export PATH="$PATH:$ANDROID_HOME/emulator"
-
-        # Platform Tools
-        export PATH="$PATH:$ANDROID_HOME/platform-tools"
-
-        # Native Development Kit
-        NDK="$ANDROID_HOME/ndk"
-        NDK_VER=$(findver $NDK)
-        if [[ -n $NDK_VER ]]; then
-            export PATH="$PATH:$NDK/$NDK_VER"
-        fi
-
-        # Command Line Tools
-        CTOOLS="$ANDROID_HOME/cmdline-tools"
-        CTOOLS_VER=$(findver $CTOOLS)
-        if [[ -n $CTOOLS_VER ]]; then
-            export PATH="$PATH:$CTOOLS/$CTOOLS_VER"
-        fi
-
-        # Command Line Tools
-        BTOOLS="$ANDROID_HOME/build-tools"
-        BTOOLS_VER=$(findver $BTOOLS)
-        if [[ -n $BTOOLS_VER ]]; then
-            export PATH="$PATH:$BTOOLS/$BTOOLS_VER"
-        fi
-    fi
-# }}}
-
-fi
 
 # }}}
 ################################################################################
@@ -410,12 +377,14 @@ alias j='jobs'
 alias dt='date "+%Y-%m-%d %A %T %Z"'
 alias e='$EDITOR'
 alias se='sudo $EDITOR'
+alias s='sudo -i'
 alias t='tree -CAhF --dirsfirst'    # file tree with size & color
 alias tree='tree -CAhF --dirsfirst'
 alias treed='tree -CAFd'
 alias mk='make'
 alias g='grep --color=always'
 alias grep='grep --color=always'
+alias py='python3'
 alias dk='docker'
 alias ks='kubectl'
 alias ls='ls --color=always'
@@ -472,6 +441,17 @@ alias b64='base64'
 # }}}
 ################################################################################
 
+if ! [ -n "$BASH" ]; then
+    return
+fi
+
+# See `man readline` for more readline variables
+bind "set bell-style visible"           # mute
+bind "set colored-completion-prefix on" # colorize prefix
+bind "set colored-stats on"             # colorize file type(stat)
+bind "set completion-ignore-case on"    # ignore alphabetical case
+bind "set completion-map-case on"       # mix hyphens & underscores
+
 ################################################################################
 # Prompt String {{{
 
@@ -493,32 +473,29 @@ CYAN="\033[1;36m"
 LIGHTCYAN="\033[1;36m"
 NOCOLOR="\033[0m"
 
-if [[ $EUID -ne 0 ]]; then
-    PROMPT="\[${NOCOLOR}\][\[${LIGHTBLUE}\]"
+if [ $EUID -ne 0 ]; then
+    PROMPT="${PROMPT:-}\[${NOCOLOR}\](\[${LIGHTBLUE}\]"
 else
-    PROMPT="\[${NOCOLOR}\][\[${LIGHTRED}\]"
+    PROMPT="${PROMPT:-}\[${NOCOLOR}\](\[${LIGHTMAGENTA}\]"
 fi
 
 # User and server
-SSHIP=`echo $SSH_CLIENT | awk '{ print $1 }'`
-SSH2IP=`echo $SSH2_CLIENT | awk '{ print $1 }'`
+SSH_IP=`echo $SSH_CLIENT | awk '{ print $1 }'`
+SSH2_IP=`echo $SSH2_CLIENT | awk '{ print $1 }'`
 
-if [ $SSH2IP ] || [ $SSHIP ] ; then
-    PROMPT+="\u@\h\[${NOCOLOR}\]㉿"
+if [ $SSH2_IP ] || [ $SSH_IP ] ; then
+    PROMPT="${PROMPT:-}\u@\h\[${NOCOLOR}\]:"
 else
-    PROMPT+="\u\[${NOCOLOR}\]㉿"
+    PROMPT="${PROMPT:-}\u\[${NOCOLOR}\]:"
 fi
 
-unset SSHIP
-unset SSH2IP
-
 # Current directory
-PROMPT+="\[${NOCOLOR}\]\[${LIGHTGREEN}\]\W\[${NOCOLOR}\]]"
+PROMPT="${PROMPT:-}\[${NOCOLOR}\]\[${LIGHTGREEN}\]\W\[${NOCOLOR}\])"
 
-if [[ $EUID -ne 0 ]]; then
-    PROMPT+="\$\[${NOCOLOR}\] " # Normal user
+if [ $EUID -ne 0 ]; then
+    PROMPT="${PROMPT:-}\$\[${NOCOLOR}\] " # Normal user
 else
-    PROMPT+="#\[${NOCOLOR}\] " # Root user
+    PROMPT="${PROMPT:-}#\[${NOCOLOR}\] " # Root user
 fi
 
 __myprompt ()
@@ -527,15 +504,15 @@ __myprompt ()
     local CODE=$? # should be the first command
 
     # Date
-    PS1="\[${NOCOLOR}\][\[${BROWN}\]$(date +%a\ %H:%M)\[${NOCOLOR}\]]${PROMPT}"
+    PS1="\[${NOCOLOR}\](\[${BROWN}\]$(date +%a\ %H:%M)\[${NOCOLOR}\])${PROMPT}"
 
-    if [[ $CODE != 0 ]]; then
-        PS1="\[${NOCOLOR}\][\[${LIGHTRED}\]$CODE\[${NOCOLOR}\]]${PS1:-}"
+    if [ $CODE != 0 ]; then
+        PS1="\[${NOCOLOR}\](\[${LIGHTRED}\]$CODE\[${NOCOLOR}\])${PS1:-}"
     fi
 
-    if [[ -n $VIRTUAL_ENV ]]; then
+    if [ -n "$VIRTUAL_ENV" ]; then
         local VENV=$(basename $VIRTUAL_ENV)
-        PS1="\[${NOCOLOR}\][${VENV}]${PS1:-}"
+        PS1="\[${NOCOLOR}\](${VENV})${PS1:-}"
     fi
 }
 
@@ -543,3 +520,4 @@ PROMPT_COMMAND='__myprompt'
 
 # }}}
 ################################################################################
+

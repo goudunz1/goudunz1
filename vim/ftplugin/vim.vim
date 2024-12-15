@@ -1,8 +1,5 @@
 " filetype: vim
 
-" auto fold configuration groups
-setlocal foldmethod=marker
-
 " shortcuts for loading .vimrc
 nnoremap <silent><buffer> <leader>S :source <c-r>=expand('%:p')<cr><cr>
 
