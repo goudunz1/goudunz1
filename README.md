@@ -1,4 +1,4 @@
-Binary; Malware; CTF
+A binary enthusiast.
 
 [Team N0wayBack](https://n0wayback.net)
 
